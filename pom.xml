@@ -13,7 +13,7 @@
 		<encoding>UTF-8</encoding>
 		<scala.tools.version>2.11</scala.tools.version>
 		<scala.version>2.11.2</scala.version>
-		<scalaz.version>7.0.6</scalaz.version>
+		<scalaz.version>7.1.0-RC2</scalaz.version>
 	</properties>
 
 	<dependencies>
