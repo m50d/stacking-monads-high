@@ -13,6 +13,7 @@
 		<encoding>UTF-8</encoding>
 		<scala.tools.version>2.11</scala.tools.version>
 		<scala.version>2.11.2</scala.version>
+		<scalaz.version>7.0.6</scalaz.version>
 	</properties>
 
 	<dependencies>
@@ -32,7 +33,12 @@
 		<dependency>
 			<groupId>org.scalaz</groupId>
 			<artifactId>scalaz-core_${scala.tools.version}</artifactId>
-			<version>7.0.6</version>
+			<version>${scalaz.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scalaz</groupId>
+			<artifactId>scalaz-concurrent_${scala.tools.version}</artifactId>
+			<version>${scalaz.version}</version>
 		</dependency>
 	</dependencies>
 

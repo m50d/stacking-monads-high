@@ -2,6 +2,8 @@ package net.cliché.stackingmonadshigh
 
 case class ApplicationContext()
 
+case class UserName()
+
 case class UserProfile()
 
 sealed trait NetworkError
