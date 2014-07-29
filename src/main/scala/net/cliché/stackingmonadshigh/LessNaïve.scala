@@ -10,6 +10,6 @@ class LessNaïve(profileService: ProfileService) extends ProfileClient {
   def profile(username: EitherT[ReaderFuture, NonEmptyList[NetworkError], UserName]) =
     for {
       un ← username
-      profile ← profileService.getProfile(un).lift[Future] |> EitherT.right[ReaderFuture, NonEmptyList[NetworkError], UserProfile]
+      profile ← EitherT.right[ReaderFuture, NonEmptyList[NetworkError], UserProfile](profileService.getProfile(un).lift[Future])
     } yield profile
 }
