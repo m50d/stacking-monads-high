@@ -40,6 +40,11 @@
 			<artifactId>scalaz-concurrent_${scala.tools.version}</artifactId>
 			<version>${scalaz.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.scalamacros</groupId>
+			<artifactId>scala-workflow_2.11.0-SNAPSHOT</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
