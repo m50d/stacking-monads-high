@@ -12,5 +12,7 @@ class KleisliClient(profileService: ProfileService) {
   
   val k = Kleisli[R, UserName, UserProfile](profileService.getProfile _)
   k.mapK[RT, UserProfile](_.lift[Future]).liftMK[ET]
+  
+//  Hoist()
 
 }
