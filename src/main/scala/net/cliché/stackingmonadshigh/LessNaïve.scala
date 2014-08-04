@@ -7,17 +7,17 @@ import scala.language.higherKinds
 
 class LessNaïve(profileService: ProfileService) extends ProfileClient {
 
-  def profile(username: EitherT[ReaderTFF, NonEmptyList[NetworkError], UserName]) =
+  def profile(username: EitherTFF[UserName]) =
     for {
       un ← username
       profile ← EitherT.right[ReaderTFF, NonEmptyList[NetworkError], UserProfile](profileService.getProfile(un).lift[Future])
     } yield profile
 
-  def complexCalculation(username: S[UserName]) =
+  def complexCalculation(username: EitherTFF[UserName]) =
     for {
       un ← username
       profile ← EitherT.right[ReaderTFF, NonEmptyList[NetworkError], UserProfile](profileService.getProfile(un).lift[Future])
-      tags ← MonadTrans[EitherTF].liftM(
+      tags ← MonadTrans[EitherTF].liftM[ReaderTFF, List[String]](
         MonadTrans[ReaderTF].liftM[EitherF, List[String]](profileService.fetchFavouriteTags(profile)))
     } yield {}
 }

@@ -9,7 +9,7 @@ class HoistClient(profileService: ProfileService) {
   def mangle(username: UserName): Future[Float] = null
 
   def profile(username: UserName) = {
-    MonadPartialOrder.transformer[ReaderTFF, ET]: MonadPartialOrder[S, ReaderTFF]
+    MonadPartialOrder.transformer[ReaderTFF, EitherTF]: MonadPartialOrder[S, ReaderTFF]
     MonadPartialOrder.transformer[Future, ReaderTF]: MonadPartialOrder[ReaderTFF, Future]
     MonadPartialOrder.transitive[S, ReaderTFF, Future]: MonadPartialOrder[S, Future]
     
