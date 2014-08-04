@@ -11,5 +11,7 @@ package object stackingmonadshigh {
   type ReaderTFF[A] = ReaderTF[Future, A]
   type EitherF[A] = NonEmptyList[NetworkError] \/ A
   type EitherTF[F[_], B] = EitherT[F, NonEmptyList[NetworkError], B]
+  type EitherTFG[A] = EitherTF[ReaderF, A]
   type EitherTFF[A] = EitherTF[ReaderTFF, A]
+//  implicitly[EitherTFF =:= ]
 }
