@@ -13,14 +13,12 @@ class LessNaïve(profileService: ProfileService) extends ProfileClient {
       profile ← EitherT.right[ReaderTFF, NonEmptyList[NetworkError], UserProfile](profileService.getProfile(un).lift[Future])
     } yield profile
 
-  def complexCalculation(username: EitherTFF[UserName]) = {
-//    val t = EitherT(profileService.fetchInferredTags(0.0).run.map { e: EitherF[List[String]] ⇒ Kleisli(e.point[ReaderF]) })
+  def complexCalculation(username: EitherTFF[UserName]) =
     for {
       un ← username
       profile ← EitherT.right[ReaderTFF, NonEmptyList[NetworkError], UserProfile](profileService.getProfile(un).lift[Future])
       tags ← EitherT(profileService.fetchFavouriteTags(profile).point[ReaderTFF])
       score ← EitherT.right[ReaderTFF, NonEmptyList[NetworkError], Double](profileService.calculateScore(tags).liftReaderT[ApplicationContext])
-      //      inferredTags ← EitherT(profileService.fetchInferredTags(score).run.map(_.liftReaderT[ApplicationContext]))
-    } yield score
-  }
+      inferredTags ← EitherT(Kleisli { _: ApplicationContext ⇒ profileService.fetchInferredTags(score).run }: ReaderTFF[NonEmptyList[NetworkError] \/ List[String]])
+    } yield inferredTags
 }
