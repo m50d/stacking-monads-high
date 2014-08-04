@@ -17,7 +17,6 @@ class LessNaïve(profileService: ProfileService) extends ProfileClient {
     for {
       un ← username
       profile ← EitherT.right[ReaderTFF, NonEmptyList[NetworkError], UserProfile](profileService.getProfile(un).lift[Future])
-      tags ← MonadTrans[EitherTF].liftM[ReaderTFF, List[String]](
-        MonadTrans[ReaderTF].liftM[EitherF, List[String]](profileService.fetchFavouriteTags(profile)))
-    } yield {}
+      tags ← EitherT(profileService.fetchFavouriteTags(profile).point[ReaderTFF])
+    } yield tags
 }
