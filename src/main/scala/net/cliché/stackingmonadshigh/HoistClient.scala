@@ -14,7 +14,7 @@ class HoistClient(profileService: ProfileService) {
   
   def profile(username: UserName) = {
     MonadPartialOrder.transformer[ReaderTFF, ET]: MonadPartialOrder[S, ReaderTFF]
-    MonadPartialOrder.transformer[ReaderF, ReaderTF] //: MonadPartialOrder[ReaderTFF, ReaderF]
+    MonadPartialOrder.transformer[Future, ReaderTF]: MonadPartialOrder[ReaderTFF, Future]
 //    MonadPartialOrder.transform
   }
 //    implicitly[MonadPartialOrder[S, R]].promote(profileService.getProfile(username))
