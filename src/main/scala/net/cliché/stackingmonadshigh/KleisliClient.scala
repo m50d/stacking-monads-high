@@ -6,7 +6,6 @@ import scalaz.concurrent.Future
 import scala.language.higherKinds
 
 class KleisliClient(profileService: ProfileService) {
-  //  implicitly[EitherTFG =:= Kleisli[]]
 
   val k =
     profileService.getProfileK.mapK[ReaderTFF, UserProfile](_.lift[Future]).liftMK[EitherTF] >=>
