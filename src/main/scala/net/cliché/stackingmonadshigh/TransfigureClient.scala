@@ -9,6 +9,7 @@ import scalaz.TransfigureTo.syntax._
 class TransfigureClient(profileService: ProfileService) {
   def complexCalculation(username: EitherTFF[UserName]) = {
     username.transfigureTo[EitherTFF](profileService.getProfile _)
+      .transfigureTo[EitherTFF](profileService.fetchFavouriteTags _)
     
     for {
       un ← username
