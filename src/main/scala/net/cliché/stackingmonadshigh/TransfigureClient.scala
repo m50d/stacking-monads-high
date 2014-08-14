@@ -3,6 +3,7 @@ package net.cliché.stackingmonadshigh
 import scalaz._
 import scalaz.Scalaz._
 import scalaz.concurrent.Future
+import scalaz.Transfigure._
 import scalaz.TransfigureTo.syntax._
 
 class TransfigureClient(profileService: ProfileService) {
