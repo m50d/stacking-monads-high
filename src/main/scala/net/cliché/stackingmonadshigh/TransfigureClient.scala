@@ -7,7 +7,9 @@ import scalaz.Transfigure._
 import scalaz.TransfigureTo.syntax._
 
 class TransfigureClient(profileService: ProfileService) {
-  def complexCalculation(username: EitherTFF[UserName]) =
+  def complexCalculation(username: EitherTFF[UserName]) = {
+    username.transfigureTo[EitherTFF](profileService.getProfile _)
+    
     for {
       un ← username
       profile ← EitherT.right[ReaderTFF, NonEmptyList[NetworkError], UserProfile](profileService.getProfile(un).lift[Future])
@@ -15,5 +17,6 @@ class TransfigureClient(profileService: ProfileService) {
       score ← EitherT.right[ReaderTFF, NonEmptyList[NetworkError], Double](profileService.calculateScore(tags).liftReaderT[ApplicationContext])
       inferredTags ← EitherT(Kleisli { _: ApplicationContext ⇒ profileService.fetchInferredTags(score).run }: ReaderTFF[NonEmptyList[NetworkError] \/ List[String]])
     } yield inferredTags
+  }
 
 }
