@@ -5,11 +5,12 @@ import scalaz.Scalaz._
 import scalaz.concurrent.Future
 import scalaz.Transfigure._
 import scalaz.TransfigureTo.syntax._
+import scala.Predef.identity
 
 class TransfigureClient(profileService: ProfileService) {
   def complexCalculation(username: EitherTFF[UserName]) = {
     val un: ReaderF[Future[EitherF[UserName]]] = username.run.mapK[Id, Future[EitherF[UserName]]](identity)
-    un.transfigureTo[ReaderF, Future](profileService.getProfile _)
+//    un.transfigureTo[ReaderF, Future](profileService.getProfile _)
 //    transfigureTo[EitherTFF](profileService.getProfile _).run.run
 //      .map(_.transfigureTo[Future, EitherF](profileService.fetchFavouriteTags _))
       

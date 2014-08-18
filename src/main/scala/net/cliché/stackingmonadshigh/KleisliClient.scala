@@ -4,6 +4,7 @@ import scalaz._
 import scalaz.Scalaz._
 import scalaz.concurrent.Future
 import scala.language.higherKinds
+import scala.Predef.implicitly
 
 class KleisliClient(profileService: ProfileService) {
 
