@@ -12,9 +12,8 @@ class TransfigureClient(profileService: ProfileService) {
     val un: Future[WriterF[EitherF[UserName]]] = username.run.run.map { case (s, a) ⇒ Writer(s, a) }
     val a1 = un
       .transfigureTo3[Future, WriterF, EitherF](profileService.getProfile)
-    val b1: Future[WriterF[EitherF[UserProfile]]] = a1
-//    val a2: Future[WriterF[EitherF[String]]] = a1
-//      .transfigureTo3[Future, WriterF, EitherF](profileService.fetchFavouriteTag)
+    val a2 = (a1: Future[WriterF[EitherF[UserProfile]]])
+      .transfigureTo3[Future, WriterF, EitherF](profileService.fetchFavouriteTag)
 
     //    for {
     //      un ← username
