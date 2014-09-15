@@ -9,10 +9,11 @@ class LessNaïve(profileService: ProfileService) extends ProfileClient {
   //An earlier version of this talk used ReaderT rather than WriterT.
   //ReaderT has a .lift[Future], but this is specific to Reader.
   //This was the best "general" solution I could come up with
+  //It's possible an alternative exists using |>=|
   val futurePoint = new (Id ~> Future) {
     def apply[A](a: A) = Future(a)
   }
-  def writerFuturePoint[A](w: WriterF[A]): WriterTFF[A] = WriterT.writerTHoist[Vector[AuditEntry]].hoist(futurePoint).apply(w)
+  val writerFuturePoint = WriterT.writerTHoist[Vector[AuditEntry]].hoist(futurePoint)
 
   def profile(username: EitherTFF[UserName]) =
     for {
@@ -26,6 +27,6 @@ class LessNaïve(profileService: ProfileService) extends ProfileClient {
       profile ← EitherT.right[WriterTFF, NonEmptyList[NetworkError], UserProfile](writerFuturePoint(profileService.getProfile(un)))
       tags ← EitherT(profileService.fetchFavouriteTags(profile).point[WriterTFF])
       score ← EitherT.right[WriterTFF, NonEmptyList[NetworkError], Double](WriterT.put(profileService.calculateScore(tags))(Vector[AuditEntry]()))
-      //inferredTags ← EitherT(profileService.fetchInferredTags(score).point[WriterTFF] : WriterTFF[NonEmptyList[NetworkError] \/ List[String]])
-    } yield {} //inferredTags
+      inferredTags ← EitherT(WriterT(profileService.fetchInferredTags(1.0).run.map(e ⇒ (Vector(), e))): WriterTFF[NonEmptyList[NetworkError] \/ List[String]])
+    } yield inferredTags
 }
