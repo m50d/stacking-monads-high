@@ -6,12 +6,11 @@ import scalaz.concurrent.Future
 import scala.language.higherKinds
 
 package object stackingmonadshigh {
-  type ReaderF[A] = Reader[ApplicationContext, A]
-  type ReaderTF[F[_], A] = ReaderT[F, ApplicationContext, A]
-  type ReaderTFF[A] = ReaderTF[Future, A]
+  type WriterF[A] = Reader[Vector[AuditEntry], A]
+  type WriterTF[F[_], A] = WriterT[F, Vector[AuditEntry], A]
+  type WriterTFF[A] = WriterTF[Future, A]
   type EitherF[A] = NonEmptyList[NetworkError] \/ A
   type EitherTF[F[_], B] = EitherT[F, NonEmptyList[NetworkError], B]
-  type EitherTFG[A] = EitherTF[ReaderF, A]
-  type EitherTFF[A] = EitherTF[ReaderTFF, A]
-//  implicitly[EitherTFF =:= ]
+  type EitherTFG[A] = EitherTF[WriterF, A]
+  type EitherTFF[A] = EitherTF[WriterTFF, A]
 }

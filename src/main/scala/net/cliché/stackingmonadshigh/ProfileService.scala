@@ -1,12 +1,13 @@
 package net.cliché.stackingmonadshigh
 
 import scalaz._
+import scalaz.Scalaz._
 import scalaz.concurrent.Future
 
 trait ProfileService {
-  def getProfile(username: UserName) = Reader((applicationContext: ApplicationContext) ⇒ applicationContext.getProfile(username))
+  def getProfile(username: UserName) = UserProfile().set(Vector[AuditEntry]())
   
-  val getProfileK: Kleisli[ReaderF, UserName, UserProfile]
+  val getProfileK: Kleisli[WriterF, UserName, UserProfile]
   
   def fetchFavouriteTags(profile: UserProfile): NonEmptyList[NetworkError] \/ List[String]
   

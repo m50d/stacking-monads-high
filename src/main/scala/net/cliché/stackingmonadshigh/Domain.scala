@@ -4,9 +4,7 @@ case class UserName()
 
 case class UserProfile()
 
-class ApplicationContext {
-  def getProfile(username: UserName) = UserProfile()
-}
+case class AuditEntry(message: String)
 
 sealed trait NetworkError
 
