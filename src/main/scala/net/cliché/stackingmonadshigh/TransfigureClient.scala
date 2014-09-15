@@ -10,9 +10,8 @@ import scala.Predef.identity
 class TransfigureClient(profileService: ProfileService) {
   def complexCalculation(username: EitherTFF[UserName]) = {
     val un: Future[WriterF[EitherF[UserName]]] = username.run.run.map { case (s, a) ⇒ Writer(s, a) }
-
-    //    un
-    //      .transfigureTo3[WriterF, Future, EitherF](profileService.getProfile _)
+    un
+      .transfigureTo3[Future, WriterF, EitherF](profileService.getProfile)
     //    transfigureTo[EitherTFF](profileService.getProfile _).run.run
     //      .map(_.transfigureTo[Future, EitherF](profileService.fetchFavouriteTags _))
 
