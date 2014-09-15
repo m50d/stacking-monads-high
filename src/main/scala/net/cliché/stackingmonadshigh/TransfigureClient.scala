@@ -9,19 +9,15 @@ import scala.Predef.identity
 
 class TransfigureClient(profileService: ProfileService) {
   def complexCalculation(username: EitherTFF[UserName]) = {
-    val un: Future[WriterF[EitherF[UserName]]] = username.run.run.map { case (s, a) ⇒ Writer(s, a) }
-    val a1 = un
+    val un = username.run.run.map { case (s, a) ⇒ Writer(s, a) }
+
+    val a1 = (un: Future[WriterF[EitherF[UserName]]])
       .transfigureTo3[Future, WriterF, EitherF](profileService.getProfile)
     val a2 = (a1: Future[WriterF[EitherF[UserProfile]]])
       .transfigureTo3[Future, WriterF, EitherF](profileService.fetchFavouriteTag)
-
-    //    for {
-    //      un ← username
-    //      profile ← EitherT.right[ReaderTFF, NonEmptyList[NetworkError], UserProfile](profileService.getProfile(un).lift[Future])
-    //      tags ← EitherT(profileService.fetchFavouriteTags(profile).point[ReaderTFF])
-    //      score ← EitherT.right[ReaderTFF, NonEmptyList[NetworkError], Double](profileService.calculateScore(tags).liftReaderT[ApplicationContext])
-    //      inferredTags ← EitherT(Kleisli { _: ApplicationContext ⇒ profileService.fetchInferredTags(score).run }: ReaderTFF[NonEmptyList[NetworkError] \/ List[String]])
-    //    } yield inferredTags
+    val a3 = (a2: Future[WriterF[EitherF[String]]])
+      .transfigureTo3[Future, WriterF, EitherF](profileService.calculateScore)
+    val a4 = (a3: Future[WriterF[EitherF[Double]]])
+      .transfigureTo3[Future, WriterF, EitherF](profileService.fetchInferredTagT)
   }
-
 }
