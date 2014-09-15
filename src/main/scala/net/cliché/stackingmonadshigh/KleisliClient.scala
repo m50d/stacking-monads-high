@@ -14,8 +14,8 @@ class KleisliClient(profileService: ProfileService) {
 
   val k =
     profileService.getProfileK.mapK[WriterTFF, UserProfile](writerFuturePoint.apply).liftMK[EitherTF] >=>
-      profileService.fetchFavouriteTagsK.mapK[EitherTFF, List[String]] { e ⇒ EitherT(e.point[WriterTFF]) } >=>
+      profileService.fetchFavouriteTagK.mapK[EitherTFF, String] { e ⇒ EitherT(e.point[WriterTFF]) } >=>
       profileService.calculateScoreK.liftMK[WriterTF].liftMK[EitherTF] >=>
-      profileService.fetchInferredTagsK.mapK[EitherTFF, List[String]](Hoist[EitherTF].hoist(implicitly[WriterTFF |>=| Future]).apply)
+      profileService.fetchInferredTagK.mapK[EitherTFF, String](Hoist[EitherTF].hoist(implicitly[WriterTFF |>=| Future]).apply)
 
 }

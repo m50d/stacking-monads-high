@@ -9,15 +9,17 @@ trait ProfileService {
   
   val getProfileK: Kleisli[WriterF, UserName, UserProfile]
   
-  def fetchFavouriteTags(profile: UserProfile): NonEmptyList[NetworkError] \/ List[String]
+  def fetchFavouriteTag(profile: UserProfile): NonEmptyList[NetworkError] \/ String
   
-  val fetchFavouriteTagsK: Kleisli[EitherF, UserProfile, List[String]] 
+  val fetchFavouriteTagK: Kleisli[EitherF, UserProfile, String] 
   
-  def calculateScore(data: List[String]): Future[Double]
+  def calculateScore(data: String): Future[Double]
   
-  val calculateScoreK: Kleisli[Future, List[String], Double]
+  val calculateScoreK: Kleisli[Future, String, Double]
   
-  def fetchInferredTags(score: Double): EitherT[Future, NonEmptyList[NetworkError], List[String]]
+  def fetchInferredTag(score: Double): EitherT[Future, NonEmptyList[NetworkError], String]
   
-  val fetchInferredTagsK: Kleisli[({type L[A] = EitherTF[Future, A]})#L, Double, List[String]]
+  def fetchInferredTagT(score: Double): Future[NonEmptyList[NetworkError] \/ String]
+  
+  val fetchInferredTagK: Kleisli[({type L[A] = EitherTF[Future, A]})#L, Double, String]
 }

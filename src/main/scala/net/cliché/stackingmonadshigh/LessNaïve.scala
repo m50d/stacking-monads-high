@@ -25,8 +25,8 @@ class LessNaïve(profileService: ProfileService) extends ProfileClient {
     for {
       un ← username
       profile ← EitherT.right[WriterTFF, NonEmptyList[NetworkError], UserProfile](writerFuturePoint(profileService.getProfile(un)))
-      tags ← EitherT(profileService.fetchFavouriteTags(profile).point[WriterTFF])
+      tags ← EitherT(profileService.fetchFavouriteTag(profile).point[WriterTFF])
       score ← EitherT.right[WriterTFF, NonEmptyList[NetworkError], Double](WriterT.put(profileService.calculateScore(tags))(Vector[AuditEntry]()))
-      inferredTags ← EitherT(WriterT(profileService.fetchInferredTags(1.0).run.map(e ⇒ (Vector(), e))): WriterTFF[NonEmptyList[NetworkError] \/ List[String]])
+      inferredTags ← EitherT(WriterT(profileService.fetchInferredTag(score).run.map(e ⇒ (Vector(), e))): WriterTFF[NonEmptyList[NetworkError] \/ String])
     } yield inferredTags
 }
